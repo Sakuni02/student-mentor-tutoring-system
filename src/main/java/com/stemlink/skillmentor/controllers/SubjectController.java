@@ -19,7 +19,6 @@ public class SubjectController {
     private final ModelMapper modelMapper;
     private final SubjectService subjectService;
 
-
     @GetMapping
     public List<Subject> getAllSubjects() {
         return subjectService.getAllSubjects();
@@ -29,6 +28,17 @@ public class SubjectController {
     public Subject getSubjectById(@PathVariable Long id) {
         return subjectService.getSubjectById(id);
     }
+
+//    @PostMapping
+//    public Subject createSubject(@Valid @RequestBody Subject subject) {
+//        Long mentorId = 1L;
+//
+//        // check validation
+//        if(subject.getSubjectName().length() < 3){
+//            return null;
+//        }
+//        return subjectService.addNewSubject(mentorId, subject);
+//    }
 
     @PostMapping
     public Subject createSubject(@Valid @RequestBody SubjectDTO subjectDTO) {
@@ -46,6 +56,4 @@ public class SubjectController {
     public void deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
     }
-
-
 }

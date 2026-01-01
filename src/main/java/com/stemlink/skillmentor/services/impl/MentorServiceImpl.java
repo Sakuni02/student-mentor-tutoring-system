@@ -30,9 +30,7 @@ public class MentorServiceImpl implements MentorService {
             // What, When, Where, Why
             //System.err.println("Error creating mentor" + exception.getMessage());
             throw new SkillMentorException("Fail to create a new mentor", HttpStatus.CONFLICT);
-
         }
-
     }
 
     public Page<Mentor> getAllMentors(Pageable pageable) {

@@ -1,8 +1,9 @@
 package com.stemlink.skillmentor.repositories;
 
-import com.stemlink.skillmentor.entities.Mentor;
+import com.stemlink.skillmentor.entities.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-public interface MentorRepository extends JpaRepository<Mentor, Long> {
+@Repository
+public interface SessionRepository extends JpaRepository<Session,Long> {
 }
