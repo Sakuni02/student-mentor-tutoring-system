@@ -1,7 +1,7 @@
 package com.stemlink.skillmentor.controllers;
 
 import com.stemlink.skillmentor.dto.SubjectDTO;
-import com.stemlink.skillmentor.services.impl.SubjectServiceImpl;
+import com.stemlink.skillmentor.services.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ import com.stemlink.skillmentor.entities.Subject;
 public class SubjectController {
 
     private final ModelMapper modelMapper;
-    private final SubjectServiceImpl subjectService;
+    private final SubjectService subjectService;
 
 
     @GetMapping

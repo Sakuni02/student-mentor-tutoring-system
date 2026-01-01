@@ -2,10 +2,12 @@ package com.stemlink.skillmentor.controllers;
 
 import com.stemlink.skillmentor.dto.MentorDTO;
 import com.stemlink.skillmentor.entities.Mentor;
-import com.stemlink.skillmentor.services.impl.MentorServiceImpl;
+import com.stemlink.skillmentor.services.MentorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class MentorController extends AbstractController {
-    public final MentorServiceImpl mentorService;
+    public final MentorService mentorService;
     private final ModelMapper modelMapper;
 
 
     @GetMapping
-    public List<Mentor> getAllMentors() {
-        return mentorService.getAllMentors();
+    public ResponseEntity<Page<Mentor>> getAllMentors(Pageable pageable) {
+        Page<Mentor> mentors= mentorService.getAllMentors(pageable);
+        return sendOkResponse(mentors);
     }
 
     @GetMapping("{id}")
