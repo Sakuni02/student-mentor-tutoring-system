@@ -2,10 +2,11 @@ package com.stemlink.skillmentor.controllers;
 
 import com.stemlink.skillmentor.dto.MentorDTO;
 import com.stemlink.skillmentor.entities.Mentor;
-import com.stemlink.skillmentor.services.MentorService;
+import com.stemlink.skillmentor.services.impl.MentorServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,8 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/mentors")
 @RequiredArgsConstructor
 @Validated
-public class MentorController {
-    public final MentorService mentorService;
+public class MentorController extends AbstractController {
+    public final MentorServiceImpl mentorService;
     private final ModelMapper modelMapper;
 
 
@@ -26,25 +27,29 @@ public class MentorController {
     }
 
     @GetMapping("{id}")
-    public Mentor getMentorById(@PathVariable Long id) {
-        return mentorService.getMentorById(id);
+    public ResponseEntity<Mentor> getMentorById(@PathVariable Long id) {
+        Mentor mentor = mentorService.getMentorById(id);
+        return sendOkResponse(mentor);
     }
 
     @PostMapping
-    public Mentor createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
+    public ResponseEntity<Mentor> createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
         Mentor mentor = modelMapper.map(mentorDTO, Mentor.class);
-        return mentorService.createNewMentor(mentor);
+        Mentor createMentor = mentorService.createNewMentor(mentor);
+        return sendCreatedResponse(createMentor);
     }
 
     @PutMapping("{id}")
-    public Mentor updateMentor(@PathVariable Long id, @Valid @RequestBody MentorDTO updayeMentorDTO) {
+    public ResponseEntity<Mentor> updateMentor(@PathVariable Long id, @Valid @RequestBody MentorDTO updayeMentorDTO) {
         Mentor mentor = modelMapper.map(updayeMentorDTO, Mentor.class);
-        return mentorService.updateMentorById(id, mentor);
+        Mentor updatedMentor = mentorService.updateMentorById(id, mentor);
+        return sendOkResponse(updatedMentor);
     }
 
     @DeleteMapping("{id}")
-    public void deleteMentor(@PathVariable Long id) {
+    public ResponseEntity<Mentor> deleteMentor(@PathVariable Long id) {
         mentorService.deleteMentor(id);
+        return sendNoContentResponse();
     }
 
 }
