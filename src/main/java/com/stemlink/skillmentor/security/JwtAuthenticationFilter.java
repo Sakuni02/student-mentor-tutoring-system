@@ -1,4 +1,4 @@
-package com.stemlink.skillmentor.configs;
+package com.stemlink.skillmentor.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

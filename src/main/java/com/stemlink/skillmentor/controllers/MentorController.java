@@ -38,7 +38,7 @@ public class MentorController extends AbstractController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
     public ResponseEntity<Mentor> createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
         Mentor mentor = modelMapper.map(mentorDTO, Mentor.class);
         Mentor createMentor = mentorService.createNewMentor(mentor);
