@@ -3,16 +3,21 @@ package com.stemlink.skillmentor.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.List;
 
-@Component
-public class JwtUtil {
-    @Value("${jwt.secret:my-secret-key-must-be-at-least-32-characters-long-for-HS256}")
-    private String secretKey;
+@Slf4j
+public class SkillMentorJwtValidator implements TokenValidator {
+
+    private final String secretKey;
+
+    public SkillMentorJwtValidator(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
@@ -22,11 +27,18 @@ public class JwtUtil {
         return getClaims(token).getSubject();
     }
 
+    @Override
+    public String extractUserId(String token) {
+        return extractUsername(token);
+    }
+
     @SuppressWarnings("unchecked")
+    @Override
     public List<String> extractRoles(String token) {
         return (List<String>) getClaims(token).get("roles", List.class);
     }
 
+    @Override
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
@@ -35,8 +47,7 @@ public class JwtUtil {
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // Token validation failed - could be invalid signature, expired, or missing kid header
+            log.error("Failed to validate JWT token: {}",e.getMessage());
             return false;
         }
     }
