@@ -32,6 +32,15 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && tokenValidator.validateToken(token)) {
             String userId = tokenValidator.extractUserId(token);
+
+            // extract user id, first name, last name, email from token
+
+            String email = tokenValidator.extractEmail(token);
+            String firstName = tokenValidator.extractFirstName(token);
+            String lastName = tokenValidator.extractLastName(token);
+
+            UserPrincipal userPrincipal = new UserPrincipal(userId,email,firstName,lastName);
+
             // Extract roles from the token
             List<String> roles = tokenValidator.extractRoles(token);
             List<GrantedAuthority> authorities = roles != null ?
@@ -39,7 +48,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                             .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                             .collect(Collectors.toList()) :
                     new ArrayList<>();
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null, authorities);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
